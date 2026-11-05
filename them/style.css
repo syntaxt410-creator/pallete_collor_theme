@@ -1,0 +1,354 @@
+/* ===================================================
+   IMPORT / FONT FACE & VARIABLES
+=================================================== */
+@font-face {
+  font-family: 'Capitol City';
+  src: local('Capitol City'), local('CapitolCity');
+  font-display: swap;
+}
+
+:root {
+  --bg-coffee-base: #0a0705;
+  --font-blazed: 'Rubik Burned', cursive, sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-code: 'Capitol City', 'Impact', 'Trebuchet MS', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-coffee-base);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 92, 171, 0.12), transparent),
+    radial-gradient(circle at 100% 100%, rgba(0, 240, 255, 0.08), transparent),
+    radial-gradient(#1a110c 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 20px 20px;
+  color: #f1ede8;
+  font-family: var(--font-body);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 15px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Ambient Glow */
+.ambient-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: 0;
+  pointer-events: none;
+}
+.glow-1 {
+  top: 5%;
+  left: 5%;
+  background: rgba(188, 108, 255, 0.14);
+}
+.glow-2 {
+  bottom: 5%;
+  right: 5%;
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===================================================
+   JUDUL THEME COLOR
+=================================================== */
+.header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.theme-title {
+  display: inline-block;
+  font-family: var(--font-blazed);
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  letter-spacing: 5px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  
+  background: linear-gradient(
+    135deg,
+    #ff5cab 0%,
+    #00f0ff 25%,
+    #bc6cff 50%,
+    #c6ff34 75%,
+    #00ffff 88%,
+    #ff5cab 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  
+  animation: dynamicNeonFlow 5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 16px rgba(255, 92, 171, 0.4)) drop-shadow(0 0 28px rgba(0, 240, 255, 0.25));
+}
+
+@keyframes dynamicNeonFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: #9d8d83;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+/* ===================================================
+   GRID KARTU (KOMPAK & MULTI-KOLOM)
+=================================================== */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+/* Card Emboss Mini dengan Rotasi Garis Tepi */
+.emboss-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 1.8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.3s ease;
+  will-change: transform;
+  
+  box-shadow: 
+    -5px -5px 14px var(--card-emboss-light),
+    7px 7px 18px rgba(0, 0, 0, 0.9),
+    0 0 14px var(--card-tint-glow);
+}
+
+.emboss-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    -7px -7px 18px var(--card-emboss-light),
+    10px 10px 24px rgba(0, 0, 0, 0.95),
+    0 0 24px var(--card-tint-glow);
+}
+
+/* Rotating Conic Border Line */
+.emboss-card::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: var(--rotate-border);
+  animation: rotateBorder 4s linear infinite;
+  z-index: 0;
+  will-change: transform;
+}
+
+@keyframes rotateBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Konten Dalam Card (Background Mengalir) */
+.card-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: 18px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card-bg);
+  background-size: 260% 260%;
+  animation: flowBg 7s ease-in-out infinite alternate;
+}
+
+@keyframes flowBg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Kotak Ceruk Emboss Mini */
+.inner-carve {
+  width: 100%;
+  padding: 6px;
+  border-radius: 15px;
+  background: var(--carve-bg);
+  box-shadow: 
+    inset 3px 3px 8px rgba(0, 0, 0, 0.95),
+    inset -2px -2px 6px var(--carve-inset-light);
+  margin-bottom: 10px;
+}
+
+/* Rectangle Swatch Mini */
+.color-rectangle {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background-size: 220% 220% !important;
+  animation: flowSwatch 5s ease-in-out infinite alternate;
+  transition: transform 0.25s ease;
+}
+
+@keyframes flowSwatch {
+  0% { background-position: 0% 20%; }
+  100% { background-position: 100% 80%; }
+}
+
+.emboss-card:hover .color-rectangle {
+  transform: scale(1.02);
+}
+
+/* Efek Glossy Halus */
+.color-rectangle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  pointer-events: none;
+}
+
+/* ===================================================
+   TYPOGRAPHY KODE WARNA (FONT: CAPITOL CITY)
+=================================================== */
+.color-info {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.color-hex {
+  font-family: var(--font-code);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 1px 6px var(--text-glow));
+}
+
+.color-rgb {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(120deg, #ffffff 10%, rgba(255, 255, 255, 0.5) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  opacity: 0.8;
+}
+
+/* Tombol Salin Mini */
+.copy-btn {
+  margin-top: 9px;
+  width: 100%;
+  padding: 7px 0;
+  background: var(--btn-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #dfd4cb;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  
+  box-shadow: 
+    -2px -2px 6px var(--card-emboss-light),
+    3px 3px 8px rgba(0, 0, 0, 0.8);
+}
+
+.copy-btn:hover {
+  color: #ffffff;
+  box-shadow: 
+    -3px -3px 8px var(--card-emboss-light),
+    4px 4px 10px rgba(0, 0, 0, 0.9);
+}
+
+.copy-btn:active {
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.85),
+    inset -1px -1px 5px var(--card-emboss-light);
+  transform: scale(0.97);
+}
+
+/* ===================================================
+   TOAST NOTIFICATION
+=================================================== */
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #16100c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+#toastMsg {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+}
